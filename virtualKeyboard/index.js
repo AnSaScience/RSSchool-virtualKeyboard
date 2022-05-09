@@ -414,6 +414,51 @@ const keyboard = {
     });
   },
 
+  toggleCapsLock() {
+    this.properties.capsLock = !this.properties.capsLock;
+    // eslint-disable-next-line no-restricted-syntax
+    for (const key of this.elements.keys) {
+      if (
+        ![
+          'Enter',
+          'Del',
+          'Shift',
+          'Ctrl',
+          'Win',
+          'Alt',
+          'Tab',
+          'Caps Lock',
+          'Space',
+          'Backspace',
+          'Del',
+        ].includes(key.textContent)
+      ) {
+        key.textContent = this.properties.capsLock
+          ? key.textContent.toUpperCase()
+          : key.textContent.toLowerCase();
+      }
+    }
+  },
+
+  toggleShift() {
+    this.properties.shift = !this.properties.shift;
+    if (this.properties.shift) {
+      while (this.elements.keysContainer.childNodes.length > 0) {
+        keyboard.elements.keysContainer.removeChild(keyboard.elements.keysContainer.lastChild);
+      }
+      this.elements.keys = [];
+      this.elements.keysContainer.append(this.createKeys(this.properties.language === 'eng' ? this.keyLayout.keyShifted : this.keyLayout.keyUkrainianShifted));
+      this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard-key');
+    } else {
+      while (this.elements.keysContainer.childNodes.length > 0) {
+        keyboard.elements.keysContainer.removeChild(keyboard.elements.keysContainer.lastChild);
+      }
+      this.elements.keys = [];
+      this.elements.keysContainer.append(this.createKeys(this.properties.language === 'eng' ? this.keyLayout.keyDefault : this.keyLayout.keyUkrainian));
+      this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard-key');
+    }
+  },
+
 };
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();
