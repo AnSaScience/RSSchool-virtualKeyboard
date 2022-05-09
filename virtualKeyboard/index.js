@@ -459,6 +459,50 @@ const keyboard = {
     }
   },
 
+  inputText() {
+    this.elements.textarea.textContent = this.properties.value;
+  },
+
+  changeLang() {
+    document.addEventListener('keydown', (target) => {
+      if (target.key === 'Alt') {
+        keyboard.properties.changelang += 'Alt';
+      }
+      if (target.key === 'Control') {
+        keyboard.properties.changelang += 'Ctrl';
+      }
+      if (keyboard.properties.changelang.includes('Ctrl')) {
+        if (keyboard.properties.changelang.includes('Alt')) {
+          // if (this.properties.language === 'eng') {
+          //   this.elements.keys.forEach((x, i) => {
+          //     x.textContent = this.keyLayout.keyUkrainian[i];
+          //   });
+          //   this.properties.language = 'ua';
+          // } else {
+          //   this.elements.keys.forEach((x, i) => {
+          //     x.textContent = this.keyLayout.keyDefault[i];
+          //   });
+          //   this.properties.language = 'eng';
+          // }
+          while (this.elements.keysContainer.childNodes.length > 0) {
+            keyboard.elements.keysContainer.removeChild(keyboard.elements.keysContainer.lastChild);
+          }
+          this.properties.language = (this.properties.language === 'eng') ? 'ua' : 'eng';
+          this.elements.keys = [];
+          this.elements.keysContainer.append(this.createKeys(this.properties.language === 'eng' ? this.keyLayout.keyDefault : this.keyLayout.keyUkrainian));
+          this.elements.keys = this.elements.keysContainer.querySelectorAll('.keyboard-key');
+        }
+      }
+    });
+
+    document.addEventListener('keyup', () => {
+      const alt = /Alt/g;
+      const ctrl = /Ctrl/g;
+      this.properties.changelang = this.properties.changelang.replace(alt, '');
+
+      this.properties.changelang = this.properties.changelang.replace(ctrl, '');
+    });
+  },
 };
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();
