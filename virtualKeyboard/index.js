@@ -327,6 +327,93 @@ const keyboard = {
     return fragment;
   },
 
+  showKeyPres() {
+    // declaration of event imitation
+    const keyTouchImitation = new Event('click');
+    const keyHoldImitation = new Event('mousedown');
+    const keyUnholdImitation = new Event('mouseup');
+
+    // event listener for watching physical keyboard
+    const eventKeyDown = (event) => {
+      const targetKey = this.elements.keys[this.keyLayout.keyCode.indexOf(event.code)];
+      if (targetKey) {
+        targetKey.classList.add('keyboard-key-active');
+        switch (event.code) {
+          case 'ShiftLeft': {
+            targetKey.dispatchEvent(keyHoldImitation);
+            break;
+          }
+          case 'ShiftRight': {
+            targetKey.dispatchEvent(keyHoldImitation);
+            break;
+          }
+
+          case 'ControlLeft': {
+            targetKey.dispatchEvent(keyHoldImitation);
+            break;
+          }
+
+          case 'ControlRight': {
+            targetKey.dispatchEvent(keyHoldImitation);
+            break;
+          }
+          case 'AltLeft': {
+            targetKey.dispatchEvent(keyHoldImitation);
+            break;
+          }
+
+          case 'AltRight': {
+            targetKey.dispatchEvent(keyHoldImitation);
+            break;
+          }
+          default:
+            targetKey.dispatchEvent(keyTouchImitation);
+            break;
+        }
+        document.removeEventListener('keydown', eventKeyDown);
+      }
+    };
+    document.addEventListener('keydown', eventKeyDown);
+
+    document.addEventListener('keyup', (event) => {
+      document.addEventListener('keydown', eventKeyDown);
+      const targetKey = this.elements.keys[this.keyLayout.keyCode.indexOf(event.code)];
+      if (targetKey) {
+        targetKey.classList.remove('keyboard-key-active');
+        switch (event.code) {
+          case 'ShiftLeft': {
+            targetKey.dispatchEvent(keyUnholdImitation);
+            break;
+          }
+          case 'ShiftRight': {
+            targetKey.dispatchEvent(keyUnholdImitation);
+            break;
+          }
+          case 'ControlLeft': {
+            targetKey.dispatchEvent(keyUnholdImitation);
+            break;
+          }
+
+          case 'ControlRight': {
+            targetKey.dispatchEvent(keyUnholdImitation);
+            break;
+          }
+          case 'AltLeft': {
+            targetKey.dispatchEvent(keyUnholdImitation);
+            break;
+          }
+
+          case 'AltRight': {
+            targetKey.dispatchEvent(keyUnholdImitation);
+            break;
+          }
+          default:
+            break;
+        }
+      }
+    });
+  },
+
 };
 window.addEventListener('DOMContentLoaded', () => {
   keyboard.init();
